@@ -6,6 +6,10 @@ on:
         description: 'The zendesk tenant name, can be found in the URL, for example https://my-subdomain.zendesk.com/'
         required: true
         type: string
+      ISSUE_LABEL:
+        description: 'The required label to trigger this workflow'
+        required: true
+        type: string
     secrets:
       ZENDESK_AUTH_TOKEN:
         description: 'The zendesk basic auth token for authentification. See https://support.zendesk.com/hc/en-us/articles/115000510267-How-can-I-authenticate-API-requests-#heading2'
@@ -13,6 +17,7 @@ on:
 jobs:
   solve-ticket:
     name: Solve Zendesk ticket
+    if: ${{ contains(github.event.issue.labels.*.name, inputs.ISSUE_LABEL) }}
     runs-on: ubuntu-latest
     steps:
       - env:
